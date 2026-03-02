@@ -24,7 +24,7 @@ def optimal_sim(frames, page_refs):
     memory_page_frames = []
     page_refs_copy = page_refs.copy() # removes the used ones as we go without editing og list
 
-    for page in page_refs_copy:
+    for page in page_refs:
         if page not in memory_page_frames:
             page_faults += 1
             if len(memory_page_frames)<frames:
@@ -32,16 +32,12 @@ def optimal_sim(frames, page_refs):
                 page_refs_copy.pop(0)
             else:
                 furthest_page = None
-                furthest_index = -1
                 for page_frame in memory_page_frames:
                     if page_frame not in page_refs_copy:
                         furthest_page =page_frame
                         break
                     else:
-                        # find closest occurrence of page_frame in page_refs
-                        i = page_refs_copy.index(page_frame)
-                        if i > furthest_index:
-                            furthest_index = i
+                        if furthest_page is None or page_refs_copy.index(page_frame) > page_refs_copy.index(furthest_page):
                             furthest_page = page_frame
 
                 memory_page_frames.remove(furthest_page)
@@ -79,21 +75,26 @@ def second_chance_sim(frames, page_refs):
     # immediately AFTER the frame where you most recently loaded a new page (the first time any page is loaded, start with the first frame).
     page_faults = 0
     memory_page_frames = []
-    second_chance_bits = []
     page_refs_copy = page_refs.copy()
     rr_pointer = 0
 
     for page in page_refs_copy:
         if page not in memory_page_frames:
-            page_faults += 1
-            if len(memory_page_frames) < frames:
-                memory_page_frames.append(page)
-                second_chance_bits.append(0)
+            page_faults +=1
+            if len(memory_page_frames) <frames:
+                memory_page_frames.append(page) 
             else:
-                #something to do with the round robin pointer prob 
-                break
+                while True:
+                    if memory_page_frames[rr_pointer] == 1: 
+                        memory_page_frames[rr_pointer]= 0 
+                        rr_pointer = (rr_pointer + 1) %frames
+                    else: 
+                        memory_page_frames[rr_pointer]= page
+                        rr_pointer = (rr_pointer+1) %frames
+                        break 
 
 
+    print("Second Chance page faults: ", page_faults)
     return None
 
 def lru_sim(frames, page_refs):
@@ -117,17 +118,20 @@ def lru_sim(frames, page_refs):
 
     return None
 
+
 def main():
-    #frames, page_refs = read_file("data.txt")
+    #frames, page_refs = read_file("data1.txt") #for the testing 
     frames, page_refs = read_file("data1.txt")
 
-    #optimal_sim(frames, page_refs) #| works | sould be 9 page faults on the test data1.txt
+    optimal_sim(frames, page_refs) #| works | sould be 9 page faults on the test data1.txt
 
-    #fifo_sim(frames, page_refs) #| works | should be 15 page faults on the test data1.txt 
+   # fifo_sim(frames, page_refs) #| works | should be 15 page faults on the test data1.txt 
 
-    second_chance_sim(frames, page_refs) #| TODO |
+    #second_chance_sim(frames, page_refs) #| TODO | 
 
-    #lru_sim(frames, page_refs) #| works |
+   # lru_sim(frames, page_refs) #| works | should be 12 page faults on the test data1.txt
+
+
 
 
 if __name__ == "__main__":
