@@ -93,11 +93,20 @@ def lru_sim(frames, page_refs):
     page_faults = 0
     memory_page_frames = []
     page_refs_copy = page_refs.copy()
-    
 
-
-
-
+    for page in page_refs_copy:
+        if page in memory_page_frames:
+            # move the page to the end of the list to mark it as most recently used
+            memory_page_frames.remove(page)
+            memory_page_frames.append(page)
+            page_refs_copy.pop(0)
+        else:
+            page_faults += 1
+            if len(memory_page_frames) == frames:
+                memory_page_frames.pop(0) # remove least recently used page
+            memory_page_frames.append(page) # add new page
+            page_refs_copy.pop(0)
+    print("LRU page faults: ", page_faults)
 
     return None
 
