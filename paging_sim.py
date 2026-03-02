@@ -22,24 +22,27 @@ def optimal_sim(frames, page_refs):
     #Optimal - when you need to replace a page, replace the one whose next reference is furthest in the future.
     page_faults = 0
     memory_page_frames = []
+    page_refs_copy = page_refs.copy() # removes the used ones as we go without editing og list
 
-    for page in page_refs:
+    for page in page_refs_copy:
         if page not in memory_page_frames:
             page_faults += 1
             if len(memory_page_frames)<frames:
                 memory_page_frames.append(page)
+                page_refs_copy.pop(0)
             else:
                 furthest_page = None
                 furthest_index = -1
                 for page_frame in memory_page_frames:
-                    if page_frame not in page_refs:
+                    if page_frame not in page_refs_copy:
                         furthest_page =page_frame
                         break
                     else:
-                        i = page_refs.index(page_frame) 
-                        if i> furthest_index:
-                            furthest_index =i
-                            furthest_page =  page_frame
+                        # find closest occurrence of page_frame in page_refs
+                        i = page_refs_copy.index(page_frame)
+                        if i > furthest_index:
+                            furthest_index = i
+                            furthest_page = page_frame
 
                 memory_page_frames.remove(furthest_page)
                 memory_page_frames.append(page)
