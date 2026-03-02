@@ -81,9 +81,17 @@ def second_chance_sim(frames, page_refs):
     memory_page_frames = []
     second_chance_bits = []
     page_refs_copy = page_refs.copy()
+    rr_pointer = 0
 
-
-
+    for page in page_refs_copy:
+        if page not in memory_page_frames:
+            page_faults += 1
+            if len(memory_page_frames) < frames:
+                memory_page_frames.append(page)
+                second_chance_bits.append(0)
+            else:
+                #something to do with the round robin pointer prob 
+                break
 
 
     return None
@@ -103,7 +111,8 @@ def lru_sim(frames, page_refs):
             page_faults += 1
             if len(memory_page_frames) == frames:
                 memory_page_frames.pop(0) # remove least recently used page
-            memory_page_frames.append(page) # add new page
+            memory_page_frames.append(page) 
+
     print("LRU page faults: ", page_faults)
 
     return None
@@ -116,9 +125,9 @@ def main():
 
     #fifo_sim(frames, page_refs) #| works | should be 15 page faults on the test data1.txt 
 
-    #second_chance_sim(frames, page_refs) #| TODO |
+    second_chance_sim(frames, page_refs) #| TODO |
 
-    lru_sim(frames, page_refs) #| TODO |
+    #lru_sim(frames, page_refs) #| works |
 
 
 if __name__ == "__main__":
