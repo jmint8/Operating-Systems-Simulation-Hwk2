@@ -18,11 +18,9 @@ def  read_file(filename):
     for line in open_f:
         page_refs.append(int(line.strip()))
 
-    print("Number of frames: ", frames)
-    print("Page references: ", page_refs)
-    print(page_refs[0])
-
-
+    #print("Number of frames: ", frames)
+    #print("Page references: ", page_refs)
+    #print(page_refs[0])
     open_f.close()
     
     return frames, page_refs
@@ -31,7 +29,9 @@ def  read_file(filename):
 def optimal_sim(frames, page_refs):
     #Optimal - when you need to replace a page, replace the one whose next reference is furthest in the future.
     page_faults = 0
-
+    memory_page_frames = []
+    
+       
 
 
     
@@ -42,11 +42,19 @@ def optimal_sim(frames, page_refs):
 def fifo_sim(frames, page_refs):
     #FIFO - when you need to replace a page, replace the one that was loaded furthest in the past.
     page_faults = 0
+    memory_page_frames = []
+
+    for page in page_refs:
+        if page not in memory_page_frames:
+            page_faults += 1
+            if len(memory_page_frames) < frames:
+                memory_page_frames.append(page)
+            else:
+                memory_page_frames.pop(0)
+                memory_page_frames.append(page)
 
 
-
-
-
+    print("FIFO page faults: ", page_faults)
 
     return page_faults
 
@@ -83,11 +91,11 @@ def main():
 
     optimal_sim(frames, page_refs) #| TODO | sould be 9 page faults on the test data1.txt
 
-    fifo_sim(frames, page_refs) #| TODO | should be 15 page faults on the test data1.txt 
+    #fifo_sim(frames, page_refs) #| works | should be 15 page faults on the test data1.txt 
 
-    second_chance_sim(frames, page_refs) #| TODO |
+    #second_chance_sim(frames, page_refs) #| TODO |
 
-    lru_sim(frames, page_refs) #| TODO |
+    #lru_sim(frames, page_refs) #| TODO |
 
 
 if __name__ == "__main__":
