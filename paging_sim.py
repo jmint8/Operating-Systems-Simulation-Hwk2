@@ -78,35 +78,40 @@ def second_chance_sim(frames, page_refs):
     # into that frame (remember to set that bit to 0). When you need to do your round robin look, start with the bit for the page frame 
     # immediately AFTER the frame where you most recently loaded a new page (the first time any page is loaded, start with the first frame).
     page_faults = 0
+    memory_page_frames = []
+    second_chance_bits = []
+    page_refs_copy = page_refs.copy()
 
 
 
 
 
-
-    return page_faults
+    return None
 
 def lru_sim(frames, page_refs):
     # LRU - when you need to replace a page, replace the one that was referenced least recently.
     page_faults = 0
+    memory_page_frames = []
+    page_refs_copy = page_refs.copy()
+    
 
 
 
 
 
-    return page_faults
+    return None
 
 def main():
     #frames, page_refs = read_file("data.txt")
     frames, page_refs = read_file("data1.txt")
 
-    optimal_sim(frames, page_refs) #| TODO | sould be 9 page faults on the test data1.txt
+    #optimal_sim(frames, page_refs) #| works | sould be 9 page faults on the test data1.txt
 
     #fifo_sim(frames, page_refs) #| works | should be 15 page faults on the test data1.txt 
 
     #second_chance_sim(frames, page_refs) #| TODO |
 
-    #lru_sim(frames, page_refs) #| TODO |
+    lru_sim(frames, page_refs) #| TODO |
 
 
 if __name__ == "__main__":
