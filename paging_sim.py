@@ -79,23 +79,28 @@ def second_chance_sim(frames, page_refs):
     # into that frame (remember to set that bit to 0). When you need to do your round robin look, start with the bit for the page frame 
     # immediately AFTER the frame where you most recently loaded a new page (the first time any page is loaded, start with the first frame).
     page_faults = 0
-    memory_page_frames = []
-    page_refs_copy = page_refs.copy()
+    memory_page_frames = [] # stores the actual pages
+    reference_bits = [] # stores the bit for each frame
     rr_pointer = 0
+    page_refs_copy = page_refs.copy()
 
     for page in page_refs_copy:
         if page not in memory_page_frames:
             page_faults +=1
             if len(memory_page_frames) <frames:
-                memory_page_frames.append(page) 
+                memory_page_frames.append(page) # prety much the same as the others in the beginning
             else:
                 while True:
-                    if memory_page_frames[rr_pointer] == 1: 
+                    if memory_page_frames[rr_pointer] == 1: # if the bit is 1, set it to 0 
                         memory_page_frames[rr_pointer]= 0 
-                        rr_pointer = (rr_pointer + 1) %frames
+                        rr_pointer += 1
+                        if rr_pointer >= frames:
+                            rr_pointer = 0
                     else: 
-                        memory_page_frames[rr_pointer]= page
-                        rr_pointer = (rr_pointer+1) %frames
+                        memory_page_frames[rr_pointer]= page # otherwise rplace the page 
+                        rr_pointer += 1
+                        if rr_pointer >= frames:
+                            rr_pointer = 0
                         break 
 
 
