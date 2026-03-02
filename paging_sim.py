@@ -1,29 +1,39 @@
 #   Paging Simulation homework
 
 def  read_file(filename):
+    # first line of the file - number of page frames we got
+    #the rest are the page references.
     open_f = open(filename, 'r')
-    lines = open_f.readlines()
+    frames = int(open_f.readline().strip())
+    page_refs = []
+    for line in open_f:
+        page_refs.append(int(line.strip()))
+
+    print("Number of frames: ", frames)
+    print("Page references: ", page_refs)
+    print(page_refs[0])
+
+
     open_f.close()
-    for i in range(len(lines)):
-        print(lines[i].strip())
-    return lines
+    
+    return frames, page_refs
 
 
-def optimal_sim(lines):
+def optimal_sim(frames, page_refs):
     #Optimal - when you need to replace a page, replace the one whose next reference is furthest in the future.
     
 
     
     return 0
 
-def fifo_sim(lines):
+def fifo_sim(frames, page_refs):
     #FIFO - when you need to replace a page, replace the one that was loaded furthest in the past.
 
 
 
     return 0
 
-def second_chance_sim(lines):
+def second_chance_sim(frames, page_refs):
     # Second chance - Each page frame has an associated bit (the second chance bit) initially set to 0.  
     # The bit is also set to 0 whenever a page is loaded into the associated frame.  
     # Whenever the page in a given frame is referenced, set the associated bit to 1.  
@@ -36,7 +46,7 @@ def second_chance_sim(lines):
 
     return 0
 
-def lru_sim(lines):
+def lru_sim(frames, page_refs):
     # LRU - when you need to replace a page, replace the one that was referenced least recently.
 
 
@@ -44,15 +54,16 @@ def lru_sim(lines):
     return 0
 
 def main():
-    lines = read_file("data.txt")
+    #frames, page_refs = read_file("data.txt")
+    frames, page_refs = read_file("data1.txt")
 
-    optimal_sim(lines) #| TODO |
+    optimal_sim(frames, page_refs) #| TODO |
 
-    fifo_sim(lines) #| TODO |
+    fifo_sim(frames, page_refs) #| TODO |
 
-    second_chance_sim(lines) #| TODO |
+    second_chance_sim(frames, page_refs) #| TODO |
 
-    lru_sim(lines) #| TODO |
+    lru_sim(frames, page_refs) #| TODO |
 
 
 if __name__ == "__main__":
