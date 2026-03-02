@@ -25,13 +25,28 @@ def optimal_sim(frames, page_refs):
 
     for page in page_refs:
         if page not in memory_page_frames:
+            page_faults += 1
+            if len(memory_page_frames)<frames:
+                memory_page_frames.append(page)
+            else:
+                furthest_page = None
+                furthest_index = -1
+                for page_frame in memory_page_frames:
+                    if page_frame not in page_refs:
+                        furthest_page =page_frame
+                        break
+                    else:
+                        i = page_refs.index(page_frame) 
+                        if i> furthest_index:
+                            furthest_index =i
+                            furthest_page =  page_frame
+
+                memory_page_frames.remove(furthest_page)
+                memory_page_frames.append(page)
 
 
-
-    
-
-    
-    return page_faults
+    print("Optimal page faults: ", page_faults)
+    return None
 
 def fifo_sim(frames, page_refs):
     #FIFO - when you need to replace a page, replace the one that was loaded furthest in the past.
@@ -49,8 +64,7 @@ def fifo_sim(frames, page_refs):
 
 
     print("FIFO page faults: ", page_faults)
-
-    return page_faults
+    return None
 
 def second_chance_sim(frames, page_refs):
     # Second chance - Each page frame has an associated bit (the second chance bit) initially set to 0.  
