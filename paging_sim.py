@@ -29,20 +29,25 @@ def optimal_sim(frames, page_refs):
             page_faults += 1
             if len(memory_page_frames)<frames:
                 memory_page_frames.append(page)
-                page_refs_copy.pop(0)
+                page_refs_copy.pop(0) # keeping track of where we are 
             else:
                 furthest_page = None
+                furthest_away = 0 #
                 for page_frame in memory_page_frames:
                     if page_frame not in page_refs_copy:
-                        furthest_page =page_frame
+                        furthest_page =page_frame # if it doesnt occur again then thats the one that we replace
                         break
                     else:
-                        if furthest_page is None or page_refs_copy.index(page_frame) > page_refs_copy.index(furthest_page):
-                            furthest_page = page_frame
+                        next_index= page_refs_copy.index(page_frame)
+                        if next_index >furthest_away:# this way we can count how far the next occurence is 
+                            furthest_away = next_index 
+                            furthest_page = page_frame  # set it 
 
                 memory_page_frames.remove(furthest_page)
                 memory_page_frames.append(page)
-
+                page_refs_copy.pop(0)
+        else:
+            page_refs_copy.pop(0)
 
     print("Optimal page faults: ", page_faults)
     return None
@@ -56,9 +61,9 @@ def fifo_sim(frames, page_refs):
         if page not in memory_page_frames:
             page_faults += 1
             if len(memory_page_frames) < frames:
-                memory_page_frames.append(page)
+                memory_page_frames.append(page) 
             else:
-                memory_page_frames.pop(0)
+                memory_page_frames.pop(0) # super straight forward, pop most recent one and add new one. it will alaways be in order
                 memory_page_frames.append(page)
 
 
@@ -121,15 +126,15 @@ def lru_sim(frames, page_refs):
 
 def main():
     #frames, page_refs = read_file("data1.txt") #for the testing 
-    frames, page_refs = read_file("data1.txt")
+    frames, page_refs = read_file("data.txt")
 
     optimal_sim(frames, page_refs) #| works | sould be 9 page faults on the test data1.txt
 
-   # fifo_sim(frames, page_refs) #| works | should be 15 page faults on the test data1.txt 
+    fifo_sim(frames, page_refs) #| works | should be 15 page faults on the test data1.txt 
 
-    #second_chance_sim(frames, page_refs) #| TODO | 
+    second_chance_sim(frames, page_refs) #| TODO | 
 
-   # lru_sim(frames, page_refs) #| works | should be 12 page faults on the test data1.txt
+    lru_sim(frames, page_refs) #| works | should be 12 page faults on the test data1.txt
 
 
 
