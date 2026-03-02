@@ -1,13 +1,5 @@
 #   Paging Simulation homework
 
-class PageFrame:
-    def __init__(self, page_num):
-        self.page_num = page_num
-        self.second_chance_bit = 0
-        self.last_used= 0
-        self.valid = 0
-
-
 
 def  read_file(filename):
     # first line of the file - number of page frames we got
@@ -30,8 +22,10 @@ def optimal_sim(frames, page_refs):
     #Optimal - when you need to replace a page, replace the one whose next reference is furthest in the future.
     page_faults = 0
     memory_page_frames = []
-    
-       
+
+    for page in page_refs:
+        if page not in memory_page_frames:
+
 
 
     
